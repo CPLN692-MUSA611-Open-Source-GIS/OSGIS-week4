@@ -33,19 +33,27 @@
 ===================== */
 
 // Use the data source URL from lab 1 in this 'ajax' function:
-var downloadData = $.ajax("http://");
+var downloadData = $.ajax("http://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-crime-snippet.json");
 
 // Write a function to prepare your data (clean it up, organize it
 // as you like, create fields, etc)
-var parseData = function() {};
+var parseData = function(dat) {
+  x = JSON.parse(dat); 
+  return x };
 
 // Write a function to use your parsed data to create a bunch of
 // marker objects (don't plot them!)
-var makeMarkers = function() {};
+var makeMarkers = function(dat) {
+  result = [];
+  // x = dat.map(a => result.push({"lat": a["Lat"], "lng": a["Lng"]}))
+  x = dat.map( a => result.push(L.marker([a["Lat"], a["Lng"]])))
+  return result };
 
 // Now we need a function that takes this collection of markers
 // and puts them on the map
-var plotMarkers = function() {};
+var plotMarkers = function(dat) {
+  dat.map(a => a.addTo(map))
+};
 
 // At this point you should see a bunch of markers on your map if
 // things went well.
@@ -66,16 +74,25 @@ var plotMarkers = function() {};
 
 // Look to the bottom of this file and try to reason about what this
 // function should look like
-var removeMarkers = function() {};
+var removeMarkers = function(dat) {
+  dat.map(a => map.removeLayer(a))
+};
 
 /* =====================
   Optional, stretch goal
   Write the necessary code (however you can) to plot a filtered down version of
   the downloaded and parsed data.
 
+  Filter down data to only include those general crime category is Narcotic / Drug Law Violations.
+
   Note: You can add or remove from the code at the bottom of this file
   for the stretch goal.
 ===================== */
+
+var filterData = function(dat) {
+  new_data =  _.filter(dat, function(num){ return num["General Crime Category"] == "Narcotic / Drug Law Violations";});
+  return new_data
+}
 
 /* =====================
  Leaflet setup - feel free to ignore this
@@ -99,6 +116,7 @@ var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/ton
 
 downloadData.done(function(data) {
   var parsed = parseData(data);
+  var parsed = filterData(parsed); //filtered down data
   var markers = makeMarkers(parsed);
   plotMarkers(markers);
   removeMarkers(markers);
