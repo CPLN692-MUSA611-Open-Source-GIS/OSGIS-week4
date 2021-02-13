@@ -26,10 +26,11 @@
 /* =====================
   Define a resetMap function to remove markers from the map and clear the array of markers
 ===================== */
-var resetMap = function() {
+var resetMap = function(markerCollection) {
   /* =====================
     Fill out this function definition
   ===================== */
+  markerCollection.forEach(function(markerEntry){map.removeLayer(markerEntry)});
 };
 
 /* =====================
@@ -41,7 +42,14 @@ var getAndParseData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
-};
+  // Download the crime snippet dataset
+  var downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-crime-snippet.json")
+  downloadData.done(res => {
+    let parsed = JSON.parse(res);
+    console.log(`Data Loaded Successfully. Type: ${parsed.type}`);
+    console.log(parsed);
+  });
+}
 
 /* =====================
   Call our plotData function. It should plot all the markers that meet our criteria (whatever that
@@ -51,4 +59,8 @@ var plotData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+
+  // min & max filter: start hour end hour
+  // boolean filter: isWithin1mile of Meyerson Hall
+  // string filter: filter by general crime category (selection)
 };
