@@ -27,9 +27,7 @@
   Define a resetMap function to remove markers from the map and clear the array of markers
 ===================== */
 var resetMap = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+  myMarkers.map(a => map.removeLayer(a));
 };
 
 /* =====================
@@ -38,9 +36,12 @@ var resetMap = function() {
   it down!
 ===================== */
 var getAndParseData = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+  var downloadData = $.ajax("http://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-crime-snippet.json");
+  downloadData.done(function(data) {
+    myData = JSON.parse(data);
+    return myData
+  })
+
 };
 
 /* =====================
@@ -48,7 +49,19 @@ var getAndParseData = function() {
   criteria happens to be — that's entirely up to you)
 ===================== */
 var plotData = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+  // filter
+  currentData = myData
+  currentData = _.filter(currentData, function(num) { 
+   return num["General Crime Category"] == stringField;
+  });
+  currentData = _.filter(currentData, function(num) {
+    return num["District"] >= numericField1 && num["District"] <= numericField2;
+  })
+  currentData = _.filter(currentData, function(num) {
+    return booleanField == num["Dispatch Date/Time"].includes("PM");
+  })
+  // plot markers
+  myMarkers = [];
+  currentData.map( a => myMarkers.push(L.marker([a["Lat"], a["Lng"]])));
+  myMarkers.map(a => a.addTo(map)) 
 };

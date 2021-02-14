@@ -22,7 +22,7 @@ $('button#my-button').click(function(e) {
   console.log("booleanField", booleanField);
 
   stringField = $('#string').val();
-  console.log("stringField", stringField);
+  console.log("General Crime Category", stringField);
 
 
   /* =====================
