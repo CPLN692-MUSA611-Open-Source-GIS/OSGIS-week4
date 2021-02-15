@@ -139,7 +139,18 @@ Whole Wheat ... $4.49
 
 ===================== */
 
-// printMenuGroups(query7);
+var printMenuGroups = (que) => {
+  key = Object.keys(que)
+  key.forEach( (key) => {
+    cont = que[key]
+    console.log(key)
+    cont.map( (arr) => {
+      console.log(arr["name"], "... $", arr["price"])
+    })
+  })
+}
+
+printMenuGroups(query7);
 
 /* =====================
 We're probably writing each line of the menu with the code `food.name + " ... $" + food.price`.
@@ -154,3 +165,19 @@ you to write much clearer code with text substitution. Consider all the places a
 strings come up - templates make the introduction of variability simpler.
 
 ===================== */
+
+var printMenuGroups_new = (que) => {
+  key = Object.keys(que)
+  key.forEach( (key) => {
+    cont = que[key]
+    console.log(key)
+    cont.map( (arr) => {
+      food_i = arr["name"]
+      price_i = arr["price"]
+      var compiled = _.template("<% print(food + ' ... $' + price); %>");
+      console.log(compiled({food: food_i, price: price_i}));
+    })
+  })
+}
+
+printMenuGroups_new(query7);

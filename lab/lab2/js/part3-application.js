@@ -62,6 +62,6 @@ var plotData = function() {
   })
   // plot markers
   myMarkers = [];
-  currentData.map( a => myMarkers.push(L.marker([a["Lat"], a["Lng"]])));
+  currentData.map( a => myMarkers.push(L.marker([a["Lat"], a["Lng"]]).bindPopup(a["General Crime Category"] + '</br>' + a["Dispatch Date/Time"])));
   myMarkers.map(a => a.addTo(map)) 
 };

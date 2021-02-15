@@ -45,8 +45,8 @@ var parseData = function(dat) {
 // marker objects (don't plot them!)
 var makeMarkers = function(dat) {
   result = [];
-  // x = dat.map(a => result.push({"lat": a["Lat"], "lng": a["Lng"]}))
-  x = dat.map( a => result.push(L.marker([a["Lat"], a["Lng"]])))
+  // x = dat.map(a => result.push(L.marker({"lat": a["Lat"], "lng": a["Lng"]})))
+  x = dat.map( a => result.push(L.marker([a["Lat"], a["Lng"]]).bindPopup(a["General Crime Category"])))
   return result };
 
 // Now we need a function that takes this collection of markers
