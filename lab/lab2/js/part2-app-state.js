@@ -33,19 +33,24 @@
 ===================== */
 
 // Use the data source URL from lab 1 in this 'ajax' function:
-var downloadData = $.ajax("http://");
+var downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-solar-installations.json");
 
 // Write a function to prepare your data (clean it up, organize it
 // as you like, create fields, etc)
-var parseData = function() {};
+
+var parseData = (data) => {data.done( (arg) => { console.log(arg)
+  var parsedArg = JSON.parse(arg)}) 
+} 
+
 
 // Write a function to use your parsed data to create a bunch of
 // marker objects (don't plot them!)
-var makeMarkers = function() {};
+var makeMarkers = function(installation) {L.marker([installation.LAT, installation.LONG_])};
+
 
 // Now we need a function that takes this collection of markers
 // and puts them on the map
-var plotMarkers = function() {};
+var plotMarkers = function(data) {data.forEach.addTo(map)};
 
 // At this point you should see a bunch of markers on your map if
 // things went well.

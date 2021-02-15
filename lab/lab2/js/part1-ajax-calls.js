@@ -9,3 +9,29 @@ var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/ton
   maxZoom: 20,
   ext: 'png'
 }).addTo(map);
+
+
+// $.ajax({
+//   url: "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/world-country-capitals.json",
+//    type:"get",
+//    dataType:'text',  
+//    success: function(data){
+//      console.log(data);
+//    },
+//    error:function() {
+//      console.log("err");
+//    }
+// });
+var promise = $.ajax ("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-solar-installations.json")
+promise.done( (arg) => { console.log(arg)
+  var parsedArg = JSON.parse(arg)
+  parsedArg.forEach(addMarkers)
+  function addMarkers(installation){
+    var marker = L.marker([installation.LAT, installation.LONG_]).addTo(map)
+  };
+})
+
+
+
+
+
