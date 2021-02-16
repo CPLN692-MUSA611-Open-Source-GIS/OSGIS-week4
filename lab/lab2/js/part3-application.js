@@ -30,6 +30,10 @@ var resetMap = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  if (myMarkers.length > 0) {
+    myMarkers.forEach(mark => map.removeLayer(mark))
+    myMarkers = []
+  }
 };
 
 /* =====================
@@ -41,6 +45,29 @@ var getAndParseData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-solar-installations.json").done((res) => {
+    myData = JSON.parse(res)
+  })
+};
+
+let KWBetween = function(inst, low, high){
+  return (inst.KW >= low && inst.KW <= high)
+}
+
+let developerIs = function(inst, name){
+  return inst.DEVELOPER.toLowerCase() == name.toLowerCase()
+}
+
+let within10Y = function(inst, bool){
+  return bool? inst.YEARBUILT >= 2010 : inst.YEARBUILT < 2010
+}
+
+let makeMarkers = function(data) {
+  return data.map((loc) => L.marker([loc.Y, loc.X]))
+};
+
+let plotMarkers = function(markers) {
+  markers.forEach((mark => mark.addTo(map)))
 };
 
 /* =====================
@@ -51,4 +78,13 @@ var plotData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  let filtered = _.filter(myData, (inst) => {
+    return KWBetween(inst, numericField1, numericField2) &&
+           developerIs(inst, stringField) &&
+           within10Y(inst, booleanField)
+  })
+  console.log('filtered: ', filtered)
+
+  myMarkers = makeMarkers(filtered)
+  plotMarkers(myMarkers)
 };
