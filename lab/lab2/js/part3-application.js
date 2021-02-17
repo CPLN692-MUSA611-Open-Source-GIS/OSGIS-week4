@@ -26,7 +26,9 @@
 /* =====================
   Define a resetMap function to remove markers from the map and clear the array of markers
 ===================== */
+// working
 var resetMap = function() {
+  return myMarkers.map(marker => map.removeLayer(marker));
   /* =====================
     Fill out this function definition
   ===================== */
@@ -38,9 +40,10 @@ var resetMap = function() {
   it down!
 ===================== */
 var getAndParseData = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+  $.ajax('https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-solar-installations.json').done(json => { 
+      myData = JSON.parse(json)
+      return myData;
+    });
 };
 
 /* =====================
@@ -51,4 +54,31 @@ var plotData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  // Three filter functions
+  var filterNum = function(item, lowNum, highNum) {
+    return (item.KW >= lowNum && item.KW <= highNum);
+  }
+
+  var filterString = function(item, string) {
+    return item.ADDRESS.toUpperCase().includes(string);
+  }
+
+  var filterBool = function(item) {
+    return (booleanField ? item.YEARBUILT > 2008 : item.YEARBUILT);
+  }
+
+  displayData = _.filter(myData, function (item) {return filterNum(item, numericField1, numericField2)});
+  displayData = _.filter(displayData, function (item) {return filterString(item, stringField.toUpperCase())});
+  displayData = _.filter(displayData, function (item) {return filterBool(item)});
+
+  var makeMarkers = function(data) { 
+    return displayData.map(item => L.marker([item.Y, item.X]) ) ;
+  };
+  
+  var plotMarkers = function(data) {
+    return data.map(item => item.addTo(map));
+  };
+
+  myMarkers = makeMarkers(displayData)
+  plotMarkers(myMarkers)
 };

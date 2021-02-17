@@ -47,9 +47,6 @@ var makeMarkers = function(data) {
   return data.map(item => L.marker([item.Y, item.X]) ) ;
 };
 
-//mapJSON.forEach((item) => L.marker([item.Y, item.X]).addTo(map));
-
-
 // Now we need a function that takes this collection of markers
 // and puts them on the map
 var plotMarkers = function(data) {
