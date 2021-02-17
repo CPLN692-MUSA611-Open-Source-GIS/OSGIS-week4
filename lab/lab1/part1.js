@@ -140,8 +140,12 @@ Whole Wheat ... $4.49
 ===================== */
 
 var printMenuGroups = (lst) => {
-  category = _.keys(lst)
-  return category
+  for (key in lst)
+  { console.log(`${key}`)
+    for (var i = 0; i < lst[key].length; i++) {
+      console.log(`${lst[key][i].name}... $${lst[key][i].price}`)
+    }
+  }
 } 
 
 // printMenuGroups(query7);
