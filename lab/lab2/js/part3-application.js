@@ -30,6 +30,9 @@ var resetMap = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+    myMarkers.forEach(function(marker){
+      map.removeLayer(marker)
+    })
 };
 
 /* =====================
@@ -37,7 +40,41 @@ var resetMap = function() {
   will be called as soon as the application starts. Be sure to parse your data once you've pulled
   it down!
 ===================== */
-var getAndParseData = function() {
+var getAndParseData = function() { //get is the promise, it gets the data. We have seen the parse- in json.parse, we also need to clean up numbers
+  promise = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/world-country-capitals.json")
+  promise.done((data) => {
+    // console.log(data)
+    // myData = JSON.parse(data) //myData references this thing in part3-setup
+    var capitals =JSON.parse(data)
+    var cleancapitals = capitals.map(function (capital){
+      capital.CapitalLatitude= Number(capital.CapitalLatitude)
+      capital.CapitalLongitude= Number(capital.CapitalLongitude)
+      return capital
+    })
+    myData = cleancapitals
+  })
+    
+    
+    // var parsedArg = JSON.parse(arg)
+    //     parsedArg.forEach(addMarkers)
+    //     function addMarkers(marker){
+    //        L.marker([CapitalLatitude, CapitalLongitude]).addTo(map)
+    //     };)
+    //   })
+
+    //   var parseData = function(data) {
+    //     // data.forEach(JSON.parse(data);
+    //     //console.log(data) //this is a string
+    //     //console.log(JSON.parse(data)) //this is a function that takes data/ string and turns into js object
+    //     var capitals = JSON.parse(data)
+    //     var cleancapitals = capitals.map(function (capital){
+    //       capital.CapitalLatitude= Number(capital.CapitalLatitude)
+    //       capital.CapitalLongitude= Number(capital.CapitalLongitude)
+    //       return capital
+    //     })
+    //     //console.log(cleancapitals)
+    //      return cleancapitals
+    //   };
   /* =====================
     Fill out this function definition
   ===================== */
@@ -51,4 +88,21 @@ var plotData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  var filtered = myData.filter(function(x){
+    return x.ContinentName == stringField
+    })
+   filtered= filtered.filter(function(x){
+      return x.CapitalLatitude >= numericField1 && x.CapitalLongitude >= numericField2
+      })
+      filtered= filtered.filter(function(x){
+        return x.ContinentName.startsWith("A") == booleanField
+        })
+    myMarkers = filtered.map(function(y){ //map pushes each succesive result into a new array
+      //console.log(y)
+       return L.marker([y.CapitalLatitude, y.CapitalLongitude]).bindPopup(y.CountryName)
+    })
+    myMarkers.forEach(function(marker){
+      marker.addTo(map)
+  })
+
 };
