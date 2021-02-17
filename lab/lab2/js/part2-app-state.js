@@ -33,19 +33,56 @@
 ===================== */
 
 // Use the data source URL from lab 1 in this 'ajax' function:
-var downloadData = $.ajax("http://");
+var downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/world-country-capitals.json")
+// downloadData.done((arg) => console.log(arg))
+//saving box of potential data
+
+// promise = $.ajax ("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-solar-installations.json")
+// promise.done( (arg) => { console.log(arg)
+//   var parsedArg = JSON.parse(arg)
+//   parsedArg.forEach(addMarkers)
+//   function addMarkers(installation){
+//     var marker = L.marker([installation.LAT, installation.LONG_]).addTo(map)
+//   };
+// })
 
 // Write a function to prepare your data (clean it up, organize it
 // as you like, create fields, etc)
-var parseData = function() {};
+var parseData = function(data) {
+  // data.forEach(JSON.parse(data);
+  //console.log(data) //this is a string
+  //console.log(JSON.parse(data)) //this is a function that takes data/ string and turns into js object
+  var capitals = JSON.parse(data)
+  var cleancapitals = capitals.map(function (capital){
+    capital.CapitalLatitude= Number(capital.CapitalLatitude)
+    capital.CapitalLongitude= Number(capital.CapitalLongitude)
+    return capital
+  })
+  //console.log(cleancapitals)
+   return cleancapitals
+};
 
 // Write a function to use your parsed data to create a bunch of
 // marker objects (don't plot them!)
-var makeMarkers = function() {};
+var makeMarkers = function(x) {
+  var capitalsmapped = x.map(function(y){ //map pushes each succesive result into a new array
+    //console.log(y)
+     return L.marker([y.CapitalLatitude, y.CapitalLongitude])
+  })
+  console.log(capitalsmapped)
+  return capitalsmapped
+};
+// };
 
+//console.log(capitalsmapped)
 // Now we need a function that takes this collection of markers
 // and puts them on the map
-var plotMarkers = function() {};
+var plotMarkers = function(markers) {
+  markers.forEach(function(marker){
+    marker.addTo(map)
+
+  }) //forEach is just like map but it doesnt do a transform or map, it just loops through and calls a function, but it doesnt save 
+};
 
 // At this point you should see a bunch of markers on your map if
 // things went well.
@@ -66,7 +103,11 @@ var plotMarkers = function() {};
 
 // Look to the bottom of this file and try to reason about what this
 // function should look like
-var removeMarkers = function() {};
+var removeMarkers = function(markers) {
+  markers.forEach(function(marker){
+    map.removeLayer(marker)
+  })
+};
 
 /* =====================
  Leaflet setup - feel free to ignore this
@@ -88,9 +129,12 @@ var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/ton
  CODE EXECUTED HERE!
 ===================== */
 
-downloadData.done(function(data) {
-  var parsed = parseData(data);
+downloadData.done(function(data) { //This is the promise, it is the ajax call, .done makes it available to us, inside function provided to .done
+  console.log(data)
+  var parsed = parseData(data); //first step, the data is parsed
+  console.log(parsed)
   var markers = makeMarkers(parsed);
+  console.log(markers)
   plotMarkers(markers);
   removeMarkers(markers);
 });
