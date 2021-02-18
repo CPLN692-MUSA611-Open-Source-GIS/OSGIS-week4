@@ -30,6 +30,7 @@ var resetMap = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  return _.map(myMarkers, (i) =>{return map.removeLayer(i)})
 };
 
 /* =====================
@@ -37,18 +38,46 @@ var resetMap = function() {
   will be called as soon as the application starts. Be sure to parse your data once you've pulled
   it down!
 ===================== */
+
 var getAndParseData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+ var download = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-bike-crashes-snippet.json")
+ .done( (res) => {
+   parsed = JSON.parse(res)
+   return parsed
+ })
+ myData = download
+ return myData
 };
+
+
+var numericField1 = function(data) {
+  filtered = _.filter(data, (day) => {return day.HOUR_OF_DA <= 14 && day.HOUR_OF_DA >= 10})
+  return filtered
+}
 
 /* =====================
   Call our plotData function. It should plot all the markers that meet our criteria (whatever that
   criteria happens to be — that's entirely up to you)
 ===================== */
+
+var makeMarkers = function(data) {
+  return _.map(data, (crash) => {
+    return L.marker([crash.LAT, crash.LNG])
+  })
+};
+
+var plotMarkers = function(markers) {
+  return markers.forEach(i => i.addTo(map))
+};
+
+
 var plotData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
 };
+
+console.log(getAndParseData())
