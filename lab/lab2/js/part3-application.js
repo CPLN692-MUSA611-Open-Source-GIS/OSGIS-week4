@@ -30,6 +30,10 @@ var resetMap = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  myMarkers.forEach(function(marker) {
+      map.removeLayer(marker)
+  })
+
 };
 
 /* =====================
@@ -41,6 +45,19 @@ var getAndParseData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  // var downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/world-country-capitals.json");
+  myData.done(function(data) {
+      var parsed = JSON.parse(data)
+      var parsedType = parsed.map(function(data){
+          data["CapitalLatitude"] = parseFloat(data["CapitalLatitude"])
+          data["CapitalLongitude"] = parseFloat(data["CapitalLongitude"])
+          return data;
+      })
+      myData = parsedType;
+  })
+  // console.log(parsedType)
+  // myData = parsedType;
+
 };
 
 /* =====================
@@ -51,4 +68,48 @@ var plotData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  var pointArray = myData
+
+  // filter out latitude below the value
+  if (numericField1 !== ""){
+      console.log('in numericField1')
+      var lat1 = parseFloat(numericField1)
+      pointArray = _.filter(pointArray, function(point){
+        return point['CapitalLatitude']>lat1;
+      });
+  }
+  // filter out latitude over the value
+  if (numericField2 !== ""){
+      console.log('in numericField2')
+      var lat2 = parseFloat(numericField2)
+      pointArray = _.filter(pointArray, function(point){
+        return point['CapitalLatitude']<lat2;
+      });
+
+  }
+  // if boolean field is true, filter out all points with CountryCode === NULL
+  if (booleanField === true){
+      console.log('in boolean')
+      pointArray = _.filter(pointArray, function(point){
+        return (point['CountryCode'] !== "NULL");
+      });
+
+  }
+  // filter out CountryCode
+  if (stringField !== ""){
+      console.log('in string')
+      pointArray = _.filter(pointArray, function(point){
+        return (point['ContinentName'] === stringField);
+      });
+  }
+
+  // turn points into myMarkers
+  myMarkers = pointArray.map(function(point) {
+      return L.marker([point["CapitalLatitude"], point["CapitalLongitude"]]);
+  })
+
+  myMarkers.forEach(function(marker) {
+      marker.addTo(map)
+  })
+
 };
