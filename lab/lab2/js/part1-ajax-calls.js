@@ -18,7 +18,7 @@ success: function(res) {
 }
 })
 // print data 
-request.done((res)=>{console.log(data)})
+request.done((res)=>{console.log(res)})
 // add markers
 // I had to copy image folder from previous week 
 request.done((res)=>{_.each(data, function(capitals){
