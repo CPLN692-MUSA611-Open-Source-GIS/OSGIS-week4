@@ -27,27 +27,27 @@
   Define a resetMap function to remove markers from the map and clear the array of markers
 ===================== */
 var resetMap = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+    setMapOnAll(map);
+    clearMarkers();
+    return markers = [];
 };
-
+//can we have two returns in a function?
 /* =====================
   Define a getAndParseData function to grab our dataset through a jQuery.ajax call ($.ajax). It
   will be called as soon as the application starts. Be sure to parse your data once you've pulled
   it down!
 ===================== */
-var getAndParseData = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+var getAndParseData = function(address) {
+    let data = $.ajax(address)
+    return JSON.parse(data)
 };
 
 /* =====================
   Call our plotData function. It should plot all the markers that meet our criteria (whatever that
   criteria happens to be — that's entirely up to you)
 ===================== */
-var plotData = function() {
+var plotData = function(obj) {
+    if (obj[0] = 23) {return L.marker([obj[7], obj[8]]).addTo(map)}
   /* =====================
     Fill out this function definition
   ===================== */
