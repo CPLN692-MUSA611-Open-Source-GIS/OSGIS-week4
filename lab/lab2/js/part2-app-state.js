@@ -43,21 +43,27 @@ var parseData = function(data) {
   console.log(`Data Loaded Successfully.`);
   console.log(parsed);
 
-  filteredData = [];
-  filteredOut = [];
+  // filteredData = [];
+  // filteredOut = [];
 
-  // Add a new field to the parsed data: KWHigherThan5 to filter out those solar energy facilities lower than 5 KW
-  parsed.forEach(function(data){
-    if (data.KW >= 5){
-      data["KWHigherThan5"] = true;
-      filteredData.push(data);
-    } else {
-      data["KWHigherThan5"] = false;
-      filteredOut.push(data);
-    }
-  });
+  // // Add a new field to the parsed data: KWHigherThan5 to filter out those solar energy facilities lower than 5 KW
+  // parsed.forEach(function(data){
+  //   if (data.KW >= 5){
+  //     data["KWHigherThan5"] = true;
+  //     filteredData.push(data);
+  //   } else {
+  //     data["KWHigherThan5"] = false;
+  //     filteredOut.push(data);
+  //   }
+  // });
+
+  // Refactor data filter with underscore _.filter function
+  filteredData = _.filter(parsed, function(entry){
+    return entry.KW >= 5;
+  })
+
   console.log(`Included: ${filteredData.length} Installations`);
-  console.log(`Excluded: ${filteredOut.length} Installations`);
+  // console.log(`Excluded: ${filteredOut.length} Installations`);
   return filteredData;
 };
 
@@ -67,7 +73,7 @@ var parseData = function(data) {
 var makeMarkers = function(data) {
   markers = [];
   data.forEach(function(entry){
-    markers.push(L.marker([entry.Y, entry.X]));
+    markers.push(L.marker([entry.Y, entry.X]).bindPopup(`${entry.NAME} <br><br> Developed By: ${entry.DEVELOPER}`));
   });
   return markers;
 };

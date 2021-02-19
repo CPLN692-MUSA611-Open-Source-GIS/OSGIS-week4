@@ -2,7 +2,7 @@
 <html>
   <head>
     <!-- CSS Imports -->
-    <link rel="stylesheet" href="css/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css"/>
   </head>
   <body>
 
@@ -11,17 +11,25 @@
       <br>
       Numeric filter: <input id="num1" type="number" name="num1" value=""> to <input id="num2" type="number" name="num2" value="">
       <br>
+      <strong>Note: Day-of-month range[1,31]</strong>
+      <br><br>
       String filter: <input id="string" type="text">
       <br>
+      <strong>Please input one of the following fieldname to filter:</strong>
+      <br><small>DRIVER_16Y, DRIVER_17Y, DRIVER_65_, DRIVER_75P, DRIVER_COU, DRIVER_C_1, DRIVER_C_2, DRIVER_C_3</small>
+      <br><strong>and only crashes matching those conditions will appear.</strong>
+      <br><br>
       Boolean filter: <input id="boolean" type="checkbox">
       <br>
+      <strong>Note: Checked ~ Only show crashes with alcohol involved </strong>
+      <br><br>
       <button id="my-button">Plot Data</button>
     </div>
     <!-- Map -->
     <div id="map" style="position: absolute; right: 0; left: 400px; top: 0; bottom: 0;"></div>
 
     <!-- Javascript Imports -->
-    <script src="js/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script>
     <script src="js/underscore.js"></script>
     <script src="js/jquery-2.2.0.js"></script>
 
