@@ -33,19 +33,34 @@
 ===================== */
 
 // Use the data source URL from lab 1 in this 'ajax' function:
-var downloadData = $.ajax("http://");
+var downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-bike-crashes-snippet.json");
 
 // Write a function to prepare your data (clean it up, organize it
 // as you like, create fields, etc)
-var parseData = function() {};
+var parseData = function(data) {
+  res =JSON.parse(data)
+  //select crashes happened at peak hours of noon
+  filtered = _.filter(res, (day) => {return day.HOUR_OF_DA <= 14 && day.HOUR_OF_DA >= 10})
+  //print out selected data
+  console.log(filtered)
+  return filtered
+};
+
+
 
 // Write a function to use your parsed data to create a bunch of
 // marker objects (don't plot them!)
-var makeMarkers = function() {};
+var makeMarkers = function(data) {
+  return _.map(data, (crash) => {
+    return L.marker([crash.LAT, crash.LNG])
+  })
+};
 
 // Now we need a function that takes this collection of markers
 // and puts them on the map
-var plotMarkers = function() {};
+var plotMarkers = function(markers) {
+  return markers.forEach(i => i.addTo(map))
+};
 
 // At this point you should see a bunch of markers on your map if
 // things went well.
@@ -66,7 +81,9 @@ var plotMarkers = function() {};
 
 // Look to the bottom of this file and try to reason about what this
 // function should look like
-var removeMarkers = function() {};
+var removeMarkers = function(markers) {
+  return markers.forEach(i => map.removeLayer(i))
+};
 
 /* =====================
  Leaflet setup - feel free to ignore this
@@ -83,6 +100,7 @@ var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/ton
   maxZoom: 20,
   ext: 'png'
 }).addTo(map);
+
 
 /* =====================
  CODE EXECUTED HERE!
