@@ -33,19 +33,56 @@
 ===================== */
 
 // Use the data source URL from lab 1 in this 'ajax' function:
-var downloadData = $.ajax("http://");
+var downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-solar-installations.json");
+
 
 // Write a function to prepare your data (clean it up, organize it
 // as you like, create fields, etc)
-var parseData = function() {};
+var parseData = function(data) {
+  let parsed = JSON.parse(data);
+  console.log(`Data Loaded Successfully.`);
+  console.log(parsed);
+
+  // filteredData = [];
+  // filteredOut = [];
+
+  // // Add a new field to the parsed data: KWHigherThan5 to filter out those solar energy facilities lower than 5 KW
+  // parsed.forEach(function(data){
+  //   if (data.KW >= 5){
+  //     data["KWHigherThan5"] = true;
+  //     filteredData.push(data);
+  //   } else {
+  //     data["KWHigherThan5"] = false;
+  //     filteredOut.push(data);
+  //   }
+  // });
+
+  // Refactor data filter with underscore _.filter function
+  filteredData = _.filter(parsed, function(entry){
+    return entry.KW >= 5;
+  })
+
+  console.log(`Included: ${filteredData.length} Installations`);
+  // console.log(`Excluded: ${filteredOut.length} Installations`);
+  return filteredData;
+};
+
 
 // Write a function to use your parsed data to create a bunch of
 // marker objects (don't plot them!)
-var makeMarkers = function() {};
+var makeMarkers = function(data) {
+  markers = [];
+  data.forEach(function(entry){
+    markers.push(L.marker([entry.Y, entry.X]).bindPopup(`${entry.NAME} <br><br> Developed By: ${entry.DEVELOPER}`));
+  });
+  return markers;
+};
 
 // Now we need a function that takes this collection of markers
 // and puts them on the map
-var plotMarkers = function() {};
+var plotMarkers = function(markerCollection) {
+  markerCollection.forEach(function(markerEntry){markerEntry.addTo(map)});
+};
 
 // At this point you should see a bunch of markers on your map if
 // things went well.
@@ -66,7 +103,9 @@ var plotMarkers = function() {};
 
 // Look to the bottom of this file and try to reason about what this
 // function should look like
-var removeMarkers = function() {};
+var removeMarkers = function(markerCollection) {
+  markerCollection.forEach(function(markerEntry){map.removeLayer(markerEntry)});
+};
 
 /* =====================
  Leaflet setup - feel free to ignore this
@@ -90,7 +129,9 @@ var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/ton
 
 downloadData.done(function(data) {
   var parsed = parseData(data);
+  // console.log(parsed)
   var markers = makeMarkers(parsed);
+  console.log(markers)
   plotMarkers(markers);
   removeMarkers(markers);
 });
