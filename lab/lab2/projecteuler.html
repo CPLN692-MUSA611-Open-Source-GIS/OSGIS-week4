@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+
+    <script>
+
+    /* =====================
+    Start code
+    ===================== */
+
+    /*Problem6:Find the Sum square difference
+    link:https://projecteuler.net/problem=6
+    */
+
+    let sumList = function(list) {
+        return list.reduce((a, b) => a + b)
+    }
+
+    let sumOfSquare = function() {
+        lst = []
+        for (var i= 1; i < 101; i++) {
+            square = Math.pow(i, 2)
+            lst.push(square)
+        }
+        sum = sumList(lst)
+        return sum
+    }
+
+    let squareOfSum = function() {
+        list = []
+        for(var i = 1; i < 101; i++){
+            list.push(i)
+        }
+        sumList = sumList(list)
+        squareSum = Math.pow(sumList, 2)
+        return squareSum
+    }
+
+    let diff = sumOfSquare() - squareOfSum()
+
+    console.log(`The difference between Sum of Squares and Square of Sum is ${diff}`)
+
+    
+
+
+
+    /* =====================
+    End code
+    ===================== */
+
+    </script>
+  </body>
+</html>
