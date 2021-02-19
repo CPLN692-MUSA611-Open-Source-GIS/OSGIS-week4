@@ -9,3 +9,20 @@ var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/ton
   maxZoom: 20,
   ext: 'png'
 }).addTo(map);
+
+//https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/world-country-capitals.json
+//get data of capital cities
+var request = $.ajax({url: 'https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/world-country-capitals.json',
+success: function(res) {
+  data = JSON.parse(res);
+}
+})
+// print data 
+request.done((res)=>{console.log(res)})
+// add markers
+// I had to copy image folder from previous week 
+request.done((res)=>{_.each(data, function(capitals){
+  L.marker([capitals.CapitalLatitude,capitals.CapitalLongitude]).addTo(map)
+    .bindPopup(capitals.CapitalName + ", " + capitals.CountryName);
+})})
+

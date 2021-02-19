@@ -27,9 +27,13 @@
   Define a resetMap function to remove markers from the map and clear the array of markers
 ===================== */
 var resetMap = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+  //remove markers
+  _.each(myMarkers,function(marker){
+    map.removeLayer(marker);
+    //clear myMarkers
+    myMarkers= [];
+  })
+
 };
 
 /* =====================
@@ -38,9 +42,11 @@ var resetMap = function() {
   it down!
 ===================== */
 var getAndParseData = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+  $.ajax({url: 'https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-solar-installations.json',
+  success: function(res) {
+    myData = JSON.parse(res);
+  }
+  })
 };
 
 /* =====================
@@ -48,7 +54,28 @@ var getAndParseData = function() {
   criteria happens to be — that's entirely up to you)
 ===================== */
 var plotData = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+  subsetData = myData;
+  if(numericField1 !== "" || numericField2 !== ""){
+    subsetData = _.filter(subsetData,function(data){
+      return data.KW >= numericField1 && data.KW <= numericField2;
+    })
+  }
+  if(stringField !== ""){
+    subsetData = _.filter(subsetData,function(data){
+      return data.ZIPCODE == stringField;
+    })
+  }
+  if(booleanField){
+    subsetData = _.filter(subsetData, function(data){
+      return data.YEARBUILT > 2008;
+    })
+  }
+  myMarkers = _.map(subsetData,function(data){
+    return L.marker([data.LAT,data.LONG_])
+    .bindPopup(data.ADDRESS + "<br/> KW: " + data.KW + "<br/>Year Built:" + data.YEARBUILT + "<br/>Zip Code:" + data.ZIPCODE);
+  })
+  _.each(myMarkers,function(marker){
+    marker.addTo(map);
+  })
+
 };
