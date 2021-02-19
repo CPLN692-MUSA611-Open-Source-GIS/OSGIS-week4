@@ -45,18 +45,14 @@ var getAndParseData = function() {
   ===================== */
  var download = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-bike-crashes-snippet.json")
  .done( (res) => {
-   parsed = JSON.parse(res)
-   return parsed
+   myData = JSON.parse(res)
+   //print out data
+   console.log(myData)
+   return myData
  })
- myData = download
- return myData
 };
 
 
-var numericField1 = function(data) {
-  filtered = _.filter(data, (day) => {return day.HOUR_OF_DA <= 14 && day.HOUR_OF_DA >= 10})
-  return filtered
-}
 
 /* =====================
   Call our plotData function. It should plot all the markers that meet our criteria (whatever that
@@ -73,11 +69,22 @@ var plotMarkers = function(markers) {
   return markers.forEach(i => i.addTo(map))
 };
 
+var hourInDay = function(data, numericField1, numericField2) {
+  return data.HOUR_OF_DA >= numericField1 && data.HOUR_OF_DA <= numericField2
+}
+
 
 var plotData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
-};
 
-console.log(getAndParseData())
+  //add filter condition--hour in day
+  filter = _.filter(myData, (hour) => {
+    return hourInDay(hour, numericField1, numericField2)
+  })
+
+  console.log(filter)
+  myMarkers = makeMarkers(filter)
+  plotMarkers(myMarkers)
+};
