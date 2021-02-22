@@ -26,29 +26,60 @@
 /* =====================
   Define a resetMap function to remove markers from the map and clear the array of markers
 ===================== */
-var resetMap = function() {
+var resetMap = function(data) {
+  setTimeout(function() {
+    console.log("Removing markers...");
+    return data.map(item => map.removeLayer(item));
+  }
+  , 5000); 
+};
   /* =====================
     Fill out this function definition
   ===================== */
-};
 
 /* =====================
   Define a getAndParseData function to grab our dataset through a jQuery.ajax call ($.ajax). It
   will be called as soon as the application starts. Be sure to parse your data once you've pulled
   it down!
 ===================== */
-var getAndParseData = function() {
+var getAndParseData = function() { //get is the promise, it gets the data. We have seen the parse- in json.parse, we also need to clean up numbers
+  promise = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/world-country-capitals.json")
+  promise.done((data) => {
+    // console.log(data)
+    // myData = JSON.parse(data) //myData references this thing in part3-setup
+    var parsed =JSON.parse(data)
+    var cleaned = parsed.map(function (points){
+      points.CapitalLatitude= Number(points.CapitalLatitude)
+      points.CapitalLongitude= Number(points.CapitalLongitude)
+    return points
+    })
+  })
+return cleanedData = cleaned
+} 
   /* =====================
     Fill out this function definition
   ===================== */
-};
 
 /* =====================
   Call our plotData function. It should plot all the markers that meet our criteria (whatever that
   criteria happens to be — that's entirely up to you)
 ===================== */
-var plotData = function() {
+var plotData = data => { 
+ var filtered =  data.filter(function (i) {
+  return i.CapitalLatitude > 50 &&
+         i.CapitalLatitude > 70 && 
+         i.capitalLatitude > i.CapitalLongitude 
+    });
+    myMarkers = filtered.map(function(x){ //map pushes each succesive result into a new array
+      //console.log(y)
+       return L.marker([x.CapitalLatitude, x.CapitalLongitude]).bindPopup(x.CountryName)
+    } )
+    myMarkers.forEach((marker) => {
+      marker.addTo(map)
+  })
+} 
+
   /* =====================
     Fill out this function definition
   ===================== */
-};
+
