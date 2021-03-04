@@ -54,8 +54,13 @@ var makeMarkers = function(parsed) {
 
 // Now we need a function that takes this collection of markers
 // and puts them on the map
+myIcon = L.icon({
+  iconUrl: 'icon.png',
+  iconSize: [20,20 ]
+});
 var plotMarkers = function(markers) {
-  _.each(markers,L.marker(marker).addTo(map))
+  _.each(markers, function(marker) { L.marker(marker,{icon: myIcon}).addTo(map) 
+  })
 };
 
 // At this point you should see a bunch of markers on your map if
@@ -77,7 +82,10 @@ var plotMarkers = function(markers) {
 
 // Look to the bottom of this file and try to reason about what this
 // function should look like
-var removeMarkers = function() {};
+var removeMarkers = function(markers) {
+  _.each(markers, function(marker) { map.removeLayer(marker)
+  })
+};
 
 /* =====================
  Leaflet setup - feel free to ignore this
