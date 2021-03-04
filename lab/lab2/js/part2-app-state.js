@@ -33,19 +33,35 @@
 ===================== */
 
 // Use the data source URL from lab 1 in this 'ajax' function:
-var downloadData = $.ajax("http://");
+var downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-crime-snippet.json");
 
 // Write a function to prepare your data (clean it up, organize it
 // as you like, create fields, etc)
-var parseData = function() {};
+var parseData = function(rawdata) {
+  return JSON.parse(rawdata)
+};
 
 // Write a function to use your parsed data to create a bunch of
 // marker objects (don't plot them!)
-var makeMarkers = function() {};
+var makeMarkers = function(parsed) {
+  result=[]
+  parsed.forEach(add_new)
+  function add_new(item) {
+    result.push([item.Lat,item.Lng])
+  }
+  return result
+};
 
 // Now we need a function that takes this collection of markers
 // and puts them on the map
-var plotMarkers = function() {};
+myIcon = L.icon({
+  iconUrl: 'icon.png',
+  iconSize: [20,20 ]
+});
+var plotMarkers = function(markers) {
+  _.each(markers, function(marker) { L.marker(marker,{icon: myIcon}).addTo(map) 
+  })
+};
 
 // At this point you should see a bunch of markers on your map if
 // things went well.
@@ -66,7 +82,10 @@ var plotMarkers = function() {};
 
 // Look to the bottom of this file and try to reason about what this
 // function should look like
-var removeMarkers = function() {};
+var removeMarkers = function(markers) {
+  _.each(markers, function(marker) { map.removeLayer(marker)
+  })
+};
 
 /* =====================
  Leaflet setup - feel free to ignore this
