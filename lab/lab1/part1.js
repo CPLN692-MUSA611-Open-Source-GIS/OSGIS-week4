@@ -144,7 +144,12 @@ function printMenuGroups (query) {
   titles = _.keys(query)
   function func (title) {
     console.log (title)
-    outcome = _.map(query.title,_.template("<%= name %> ... <%- price %>"))
+    outcome = []
+    outcome = _.map(query.title,function(item){
+      format = _.template("<%= name %> ... <%- price %>")
+      return format (item)
+    })
+    console.log (outcome)
     outcome.forEach(function(item) {
       console.log(item)
     })
