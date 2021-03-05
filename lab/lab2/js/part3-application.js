@@ -70,18 +70,25 @@ var byContinent = function(inst, continent) {
 }
 
 var equatorial = function(inst, bool){
-  return bool? inst.CapitalLatitude >= -10 : inst.CapitalLatitude < 10
-}
+  console.log(inst.CapitalLatitude)
+  return bool? inst.CapitalLatitude < 10 : inst.CapitalLatitude > 10}
 
-// var equatorial = function(data) {
-//   return (booleanField ? data.CapitalLatitude < 10 && data.CapitalLatitude > -10  : data.CapitalLatitude);
-// }
-// var cold = function(data) {
-//   return (booleanField2 ? data.CapitalLatitude > 50  : data.CapitalLatitude);
-// }
+// // var byContinent = function(inst, continent) {
+// //   return (inst.ContinentName == continent)
+// // }
+
+// // var equatorial = function(inst, bool){
+// //   return bool? inst.CapitalLatitude >= -10 : inst.CapitalLatitude < 10
+// // }
+// // // var equatorial = function(data) {
+// // //   return (booleanField ? data.CapitalLatitude < 10 && data.CapitalLatitude > -10  : data.CapitalLatitude);
+// // // }
+// // // var cold = function(data) {
+// // //   return (booleanField2 ? data.CapitalLatitude > 50  : data.CapitalLatitude);
+// // // }
 
 var makeMarkers = function(data) { 
-  return myData.map(item => L.marker([item.CapitalLatitude, item.CapitalLongitude]) ) ;
+  return data.map(item => L.marker([item.CapitalLatitude, item.CapitalLongitude]) ) ;
 };
 
 var plotMarkers = function(data) {
@@ -97,11 +104,26 @@ var plotData = function() {
     Fill out this function definition
   ===================== */
 
-let filtered = _.filter(myData, (inst) => {
-  return byContinent(inst, stringField) &&
-         equatorial(inst, booleanField)
-})
-
-myMarkers = makeMarkers(filtered)
-plotMarkers(myMarkers)
+  let filtered = _.filter(myData, (inst) => {
+    return byContinent(inst, stringField) &&
+          equatorial(inst, booleanField)
+  })
+  console.log(filtered)
+  myMarkers = makeMarkers(filtered)
+  plotMarkers(myMarkers)
 };
+
+
+// var plotData = function (){
+//   var stringFiltered = myData.filter(function(datum){
+//     return datum.ContinentName.toLowerCase() === stringField.toLowerCase()
+//   })
+//   markers = stringFiltered.map((datum)=>{
+//     if(stringField===""){return true}
+//     else{
+//     return L.marker([datum.CapitalLatitutde,datum.CapitalLongitude]).bindPopup(`${datum.CapitalName},`)}
+//   })
+//   markers.forEach((marker)=>{
+//     marker.addTo(map)
+//   })
+// }

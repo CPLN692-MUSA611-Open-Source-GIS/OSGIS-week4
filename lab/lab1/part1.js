@@ -138,7 +138,9 @@ Rye ... $5.09
 Whole Wheat ... $4.49
 
 ===================== */
-
+function printMenuGroups(query7){
+   console.log(query7.type)
+}
 // printMenuGroups(query7);
 
 /* =====================
