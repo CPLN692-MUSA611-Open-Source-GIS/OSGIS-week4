@@ -33,24 +33,31 @@
 ===================== */
 
 // Use the data source URL from lab 1 in this 'ajax' function:
-var downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-solar-installations.json");
+var downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/world-country-capitals.json");
 
 // Write a function to prepare your data (clean it up, organize it
 // as you like, create fields, etc)
 
-var parseData = (data) => {data.done( (arg) => { console.log(arg)
-  var parsedArg = JSON.parse(arg)}) 
-} 
+var parseData = function(data) {
+  var parsed = JSON.parse(data);
+  var cleaned = parsed.map(point => { 
+    point.CapitalLatitude = Number(point.CapitalLatitude); 
+    point.CapitalLongitude = Number(point.CapitalLongitude)
+  })
+  return cleaned
+};
 
 
 // Write a function to use your parsed data to create a bunch of
 // marker objects (don't plot them!)
-var makeMarkers = function(installation) {L.marker([installation.LAT, installation.LONG_])};
 
+var makeMarkers = function(data) { 
+  return data.map(item => L.marker([item.CapitalLatitude, item.CapitalLongitude]) ) ;
+};
 
-// Now we need a function that takes this collection of markers
-// and puts them on the map
-var plotMarkers = function(data) {data.forEach.addTo(map)};
+var plotMarkers = function(data) {
+  return data.map(item => item.addTo(map));
+};
 
 // At this point you should see a bunch of markers on your map if
 // things went well.
@@ -71,7 +78,13 @@ var plotMarkers = function(data) {data.forEach.addTo(map)};
 
 // Look to the bottom of this file and try to reason about what this
 // function should look like
-var removeMarkers = function() {};
+var removeMarkers = function(data) {
+  setTimeout(function() {
+    console.log("Removing markers...");
+    return data.map(item => map.removeLayer(item));
+  }
+  , 5000); 
+};
 
 /* =====================
  Leaflet setup - feel free to ignore this
@@ -93,9 +106,11 @@ var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/ton
  CODE EXECUTED HERE!
 ===================== */
 
-downloadData.done(function(data) {
-  var parsed = parseData(data);
+downloadData.done(function(data) { //This is the promise, it is the ajax call, .done makes it available to us, inside function provided to .done
+  var parsed = parseData(data); //first step, the data is parsed
+  console.log(parsed)
   var markers = makeMarkers(parsed);
+  console.log(markers)
   plotMarkers(markers);
-  removeMarkers(markers);
 });
+

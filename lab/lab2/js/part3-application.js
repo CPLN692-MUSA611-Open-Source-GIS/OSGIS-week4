@@ -53,8 +53,8 @@ var getAndParseData = function() { //get is the promise, it gets the data. We ha
       points.CapitalLongitude= Number(points.CapitalLongitude)
     return points
     })
+    myData = cleaned 
   })
-return cleanedData = cleaned
 } 
   /* =====================
     Fill out this function definition
