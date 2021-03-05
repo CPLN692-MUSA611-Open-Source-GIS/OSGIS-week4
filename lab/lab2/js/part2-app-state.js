@@ -43,6 +43,7 @@ var parseData = function(data) {
   var cleaned = parsed.map(point => { 
     point.CapitalLatitude = Number(point.CapitalLatitude); 
     point.CapitalLongitude = Number(point.CapitalLongitude)
+    return point 
   })
   return cleaned
 };
@@ -52,7 +53,9 @@ var parseData = function(data) {
 // marker objects (don't plot them!)
 
 var makeMarkers = function(data) { 
-  return data.map(item => L.marker([item.CapitalLatitude, item.CapitalLongitude]) ) ;
+  return data.map(item => {
+    console.log(item) 
+    return L.marker([item.CapitalLatitude, item.CapitalLongitude])} ) ;
 };
 
 var plotMarkers = function(data) {
