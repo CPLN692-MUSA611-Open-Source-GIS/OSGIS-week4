@@ -26,10 +26,8 @@
 /* =====================
   Define a resetMap function to remove markers from the map and clear the array of markers
 ===================== */
-var resetMap = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+var resetMap = function(input) {
+  return input.map(item => map.removeLayer(item));
 };
 
 /* =====================
@@ -38,9 +36,15 @@ var resetMap = function() {
   it down!
 ===================== */
 var getAndParseData = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+ data = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/world-country-capitals.json")
+ data.done((data) => {
+  var parsed =JSON.parse(data)
+  var mapped = parsed.map(function (capitals){
+    capitals.CapitalLatitude= Number(capitals.CapitalLatitude)
+    capitals.CapitalLongitude= Number(capitals.CapitalLongitude)
+  return capitals
+  })
+})
 };
 
 /* =====================
@@ -48,7 +52,15 @@ var getAndParseData = function() {
   criteria happens to be — that's entirely up to you)
 ===================== */
 var plotData = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+  var filtered = data.filter(function (data, continent) {
+    return data.ContinentName == continent  
+  })
+
+  myMarkers = filtered.map(function(data) {
+     return L.marker([data.CapitalLatitude, data.CapitalLongitude]).bindPopup(data.CapitalName)
+    })
+
+  myMarkers.forEach((marker) => {
+    marker.addTo(map)
+  })
 };
