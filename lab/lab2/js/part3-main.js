@@ -12,17 +12,20 @@ getAndParseData();
   ALL functions called here will be called EVERY time a click event fires
 ===================== */
 $('button#my-button').click(function(e) {
-  numericField1 = $('#num1').val();
-  console.log("numericField1", numericField1);
+  // numericField1 = $('#num1').val();
+  // console.log("Latitude", numericField1);
 
-  numericField2 = $('#num2').val();
-  console.log("numericField2", numericField2);
+  // numericField2 = $('#num2').val();
+  // console.log("Longitude", numericField2);
 
   booleanField = $('#boolean')[0].checked;
-  console.log("booleanField", booleanField);
+  console.log("Equtorial?", booleanField);
+
+  // booleanField2 = $('#boolean2')[0].checked;
+  // console.log("Cold?", booleanField2);
 
   stringField = $('#string').val();
-  console.log("stringField", stringField);
+  console.log("Continent", stringField);
 
 
   /* =====================

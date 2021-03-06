@@ -1,3 +1,4 @@
+
 /* =====================
   Lab 2, part 2 - application state
 
@@ -33,19 +34,35 @@
 ===================== */
 
 // Use the data source URL from lab 1 in this 'ajax' function:
-var downloadData = $.ajax("http://");
+var downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/world-country-capitals.json")
+
 
 // Write a function to prepare your data (clean it up, organize it
 // as you like, create fields, etc)
-var parseData = function() {};
+var parseData = function(data) {
+  let capitals = JSON.parse(data)
+  let cleanedData = capitals.map(function (parsedData){
+    parsedData.CapitalLatitude= Number(parsedData.CapitalLatitude)
+    parsedData.CapitalLongitude= Number(parsedData.CapitalLongitude)
+    return parsedData
+  })
+  return cleanedData
+};
 
 // Write a function to use your parsed data to create a bunch of
 // marker objects (don't plot them!)
-var makeMarkers = function() {};
+var makeMarkers = function(data) { 
+  var markers = data.map(function(addmarkers) {return L.marker([addmarkers.CapitalLatitude,addmarkers.CapitalLongitude])})
+  return markers }
 
-// Now we need a function that takes this collection of markers
-// and puts them on the map
-var plotMarkers = function() {};
+
+  
+  //console.log(capitalsmapped)
+// // Now we need a function that takes this collection of markers
+// // and puts them on the map
+
+var plotMarkers = function(markers) {
+  markers.forEach(function(marker){marker.addTo(map)})}
 
 // At this point you should see a bunch of markers on your map if
 // things went well.
@@ -66,7 +83,12 @@ var plotMarkers = function() {};
 
 // Look to the bottom of this file and try to reason about what this
 // function should look like
-var removeMarkers = function() {};
+
+var removeMarkers = function(markers) {
+  markers.forEach(function(marker){
+    map.removeLayer(marker)
+  })
+};
 
 /* =====================
  Leaflet setup - feel free to ignore this
