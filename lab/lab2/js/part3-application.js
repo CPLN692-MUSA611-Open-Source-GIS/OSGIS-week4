@@ -30,6 +30,9 @@ var resetMap = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  myMarkers.forEach((item) =>{
+    map.removeLayer(item);
+  }) 
 };
 
 /* =====================
@@ -37,18 +40,56 @@ var resetMap = function() {
   will be called as soon as the application starts. Be sure to parse your data once you've pulled
   it down!
 ===================== */
+var filteryear = function(arr, min, max) 
+{return arr.YEARBUILT >= min && arr.YEARBUILT <= max; };
+
+var filtername = function(arr, str)
+{return arr.NAME.toLowerCase().includes(str.toLowerCase());}
+
+var filterKW = function(arr, bool)
+{return arr.KW>5 === bool;}
+
 var getAndParseData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  var downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-solar-installations.json");
+  downloadData.done((data)=> {
+    myData = JSON.parse(data);
+  })
 };
+
 
 /* =====================
   Call our plotData function. It should plot all the markers that meet our criteria (whatever that
   criteria happens to be — that's entirely up to you)
 ===================== */
+var makeMarkers = function(data) {
+  let markerlst = []
+  data.forEach((item) =>{
+    markerlst.push(L.marker([item.Y, item.X]));
+  });
+  return markerlst;
+};
+
+var plotMarkers = function(lst) {
+  lst.forEach((item) =>{
+  item.addTo(map);
+  })
+};
+
 var plotData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  console.log(myData);
+  let filter_data = _.filter(myData, (item) => {
+    return filteryear(item, numericField1, numericField2) &&
+    filtername(item, stringField) &&
+    filterKW(item, booleanField)
+  })
+
+  myMarkers = makeMarkers(filter_data)
+  plotMarkers(myMarkers);
+
 };

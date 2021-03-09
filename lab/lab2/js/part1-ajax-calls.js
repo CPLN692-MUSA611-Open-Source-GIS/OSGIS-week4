@@ -9,3 +9,12 @@ var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/ton
   maxZoom: 20,
   ext: 'png'
 }).addTo(map);
+
+var request = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-solar-installations.json");
+request.done((res)=> {
+  let parsed = JSON.parse(res);
+  console.log(parsed);
+  parsed.forEach((item) =>{
+    L.marker([item.Y, item.X]).addTo(map);
+  })
+})
