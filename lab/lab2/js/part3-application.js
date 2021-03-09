@@ -26,29 +26,52 @@
 /* =====================
   Define a resetMap function to remove markers from the map and clear the array of markers
 ===================== */
+
 var resetMap = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
-};
+    return myMarkers.map(marker => map.removeLayer(marker));
+}
 
 /* =====================
-  Define a getAndParseData function to grab our dataset through a jQuery.ajax call ($.ajax). It
-  will be called as soon as the application starts. Be sure to parse your data once you've pulled
-  it down!
+Define a getAndParseData function to grab our dataset through a jQuery.ajax call ($.ajax). It
+will be called as soon as the application starts. Be sure to parse your data once you've pulled 
+it down!
 ===================== */
+
+
 var getAndParseData = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
-};
+    downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/world-country-capitals.json")
+    downloadData.done((data) => {
+        var capitals = JSON.parse(data)
+        var cleancapitals = capitals.map(function(capital) {
+            capital.CapitalLatitude = Number(capital.CapitalLatitude)
+            capital.CapitalLongitude = Number(capital.CapitalLongitude)
+            return capital
+        })
+        myData = cleancapitals
+    })
+}
 
 /* =====================
   Call our plotData function. It should plot all the markers that meet our criteria (whatever that
   criteria happens to be — that's entirely up to you)
 ===================== */
+var byContinent = function(inst, continent) {
+    return (inst.ContinentName == continent)
+}
+
+var makeMarkers = function(data) {
+    return data.map(item => L.marker([item.CapitalLatitude, item.CapitalLongitude]));
+};
+
+var plotMarkers = function(data) {
+    return data.map(item => item.addTo(map));
+};
+
 var plotData = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+    let filtered = _.filter(myData, (inst) => {
+        return byContinent(inst, stringField)
+    })
+    console.log(filtered)
+    myMarkers = makeMarkers(filtered)
+    plotMarkers(myMarkers)
 };

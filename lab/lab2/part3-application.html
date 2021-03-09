@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <!-- CSS Imports -->
     <link rel="stylesheet" href="css/leaflet.css" />
-  </head>
-  <body>
+</head>
+
+<body>
 
     <!--Left Panel-->
     <div style="position: absolute; left: 0px; width: 400px; top: 0; bottom: 0;">
-      <br>
-      Numeric filter: <input id="num1" type="number" name="num1" value=""> to <input id="num2" type="number" name="num2" value="">
-      <br>
-      String filter: <input id="string" type="text">
-      <br>
-      Boolean filter: <input id="boolean" type="checkbox">
-      <br>
-      <button id="my-button">Plot Data</button>
+        <br> Filter by Continent: <input id="string" type="text">
+        <br>
+        <!-- Cold Capitals: <input id="boolean" type="checkbox">
+      <br> -->
+        <button id="my-button">Plot Data</button>
     </div>
     <!-- Map -->
     <div id="map" style="position: absolute; right: 0; left: 400px; top: 0; bottom: 0;"></div>
@@ -29,5 +28,6 @@
     <script src="js/part3-setup.js"></script>
     <script src="js/part3-application.js"></script>
     <script src="js/part3-main.js"></script>
-  </body>
+</body>
+
 </html>

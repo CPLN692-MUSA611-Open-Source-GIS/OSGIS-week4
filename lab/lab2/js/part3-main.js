@@ -12,27 +12,18 @@ getAndParseData();
   ALL functions called here will be called EVERY time a click event fires
 ===================== */
 $('button#my-button').click(function(e) {
-  numericField1 = $('#num1').val();
-  console.log("numericField1", numericField1);
 
-  numericField2 = $('#num2').val();
-  console.log("numericField2", numericField2);
+    stringField = $('#string').val();
+    console.log("Continent", stringField);
 
-  booleanField = $('#boolean')[0].checked;
-  console.log("booleanField", booleanField);
+    /* =====================
+      Call our resetMap function to remove markers from the map and clear out the array of marker
+      objects
+    ===================== */
+    resetMap();
 
-  stringField = $('#string').val();
-  console.log("stringField", stringField);
-
-
-  /* =====================
-    Call our resetMap function to remove markers from the map and clear out the array of marker
-    objects
-  ===================== */
-  resetMap();
-
-  /* =====================
-    Call our plotData function. It should plot all the markers that meet our criteria
-  ===================== */
-  plotData();
+    /* =====================
+      Call our plotData function. It should plot all the markers that meet our criteria
+    ===================== */
+    plotData();
 });
