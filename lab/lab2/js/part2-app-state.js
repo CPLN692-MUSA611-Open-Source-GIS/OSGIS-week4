@@ -33,19 +33,37 @@
 ===================== */
 
 // Use the data source URL from lab 1 in this 'ajax' function:
-var downloadData = $.ajax("http://");
+var downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-solar-installations.json");
 
 // Write a function to prepare your data (clean it up, organize it
 // as you like, create fields, etc)
-var parseData = function() {};
+var parseData = function(data) {
+  let parsed = JSON.parse(data);
+  filter_data = _.filter(parsed, (i)=>(i.YEARBUILT>=2010));
+  console.log(filter_data);
+  return filter_data;
+};
 
 // Write a function to use your parsed data to create a bunch of
 // marker objects (don't plot them!)
-var makeMarkers = function() {};
+var makeMarkers = function(data) {
+  let markerlst = []
+  data.forEach((item) =>{
+    //markerlst.push([item.Y, item.X]);
+    markerlst.push(L.marker([item.Y, item.X]));
+  });
+  console.log(markerlst)
+  return markerlst;
+};
 
 // Now we need a function that takes this collection of markers
 // and puts them on the map
-var plotMarkers = function() {};
+var plotMarkers = function(lst) {
+  lst.forEach((item) =>{
+  //L.marker([item[0], item[1]]).addTo(map);
+  item.addTo(map);
+  })
+};
 
 // At this point you should see a bunch of markers on your map if
 // things went well.
@@ -66,7 +84,11 @@ var plotMarkers = function() {};
 
 // Look to the bottom of this file and try to reason about what this
 // function should look like
-var removeMarkers = function() {};
+var removeMarkers = function(lst) {
+  lst.forEach((item) =>{
+    map.removeLayer(item);
+    })
+};
 
 /* =====================
  Leaflet setup - feel free to ignore this
