@@ -58,7 +58,7 @@ var makeMarkers = function(parsed) {
     lat = capital.CapitalLatitude;
     lng = capital.CapitalLongitude;
     Content = capital.CapitalName + ", \n" + capital.CountryName+ ", \n" + capital.ContinentName;
-    marker = [[lat, lng],Content]
+    marker = L.marker([lat, lng])
     markerlist.push(marker)
   })
   console.log(markerlist)
@@ -70,7 +70,7 @@ var makeMarkers = function(parsed) {
 // and puts them on the map
 var plotMarkers = function(markerlist) {
   markerlist.forEach(function(m){
-    L.marker(m[0]).addTo(map).bindPopup(m[1]).openPopup()
+    m.addTo(map)
   })
 
 };
@@ -94,7 +94,12 @@ var plotMarkers = function(markerlist) {
 
 // Look to the bottom of this file and try to reason about what this
 // function should look like
-var removeMarkers = function() {};
+var removeMarkers = function(markerlist) {
+  markerlist.forEach(function(m){
+    map.removeLayer(m)
+  })
+  
+};
 
 /* =====================
  Leaflet setup - feel free to ignore this
@@ -125,5 +130,5 @@ downloadData.done(function(data) {
   var parsed = parseData(data);
   var markers = makeMarkers(parsed);
   plotMarkers(markers);
-  //removeMarkers(markers);
+  removeMarkers(markers);
 });
