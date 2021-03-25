@@ -30,6 +30,9 @@ var resetMap = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  return myMarkers.map(function(marker){
+    map.removeLayer(marker)
+  });
 };
 
 /* =====================
@@ -37,18 +40,98 @@ var resetMap = function() {
   will be called as soon as the application starts. Be sure to parse your data once you've pulled
   it down!
 ===================== */
-var getAndParseData = function() {
+var getAndParseData = function(){
   /* =====================
     Fill out this function definition
   ===================== */
+  var downloadData = $.ajax("http://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/world-country-capitals.json");
+  downloadData.done(function(res) { 
+    var parsed = JSON.parse(res)
+    markerData = parsed
+  })
 };
+
 
 /* =====================
   Call our plotData function. It should plot all the markers that meet our criteria (whatever that
   criteria happens to be — that's entirely up to you)
 ===================== */
+
+
 var plotData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
-};
+  
+  //Clear the markers plotted last time
+  myMarkers=[]
+  popup=[]
+
+  console.log(markerData.length)
+
+  //Filter capitals whose latitudes are within a certain range
+  if (numericField1 !== "" && numericField2 !== ""){
+    if (numericField1 <= numericField2){
+      filtered = _.filter(markerData, function(cap){
+        return Math.abs(cap.CapitalLatitude)>numericField1 && Math.abs(cap.CapitalLatitude) < numericField2
+      });
+    }
+    else{
+      filtered = _.filter(markerData, function(cap){
+        return Math.abs(cap.CapitalLatitude)>numericField2 && Math.abs(cap.CapitalLatitude) < numericField1
+      });
+    }
+  }
+  else if(numericField1 !== "" && numericField2 == ""){
+    filtered = _.filter(markerData, function(cap){
+      return Math.abs(cap.CapitalLatitude) >numericField1
+    });
+  }
+  else if(numericField1 == "" && numericField2 !== ""){
+    filtered = _.filter(markerData, function(cap){
+      return Math.abs(ap.CapitalLatitude) < numericField2
+    });
+    
+  }
+  else{
+    filtered = markerData
+  }
+
+  // Filter capitals whose name is included in the stringField.
+  if(stringField !== ""){
+    filtered = _.filter(filtered, function(cap){
+      return cap.ContinentName.toLowerCase().includes(stringField.toLowerCase()) ||
+      cap.CountryName.toLowerCase().includes(stringField.toLowerCase()) ||
+      cap.CapitalName.toLowerCase().includes(stringField.toLowerCase())
+    })
+  }
+
+  console.log(filtered)
+
+  //Create markers
+  filtered.forEach(function(capital){  
+    lat = capital.CapitalLatitude;
+    lng = capital.CapitalLongitude;
+    text = capital.CapitalName + ", \n" + capital.CountryName+ ", \n" + capital.ContinentName;
+    marker = L.marker([lat, lng])
+    myMarkers.push(marker)
+    popup.push(text)
+  })
+  console.log(myMarkers)
+  
+  //Plot the markers. 
+  //If the booleanField == true, add a popup to each marker.
+  //If the booleanField == false, do not add popups.
+  if(booleanField == true){
+    for (i = 0; i < myMarkers.length; i += 1) {
+      myMarkers[i].addTo(map).bindPopup(popup[i]).openPopup()
+    }  
+  }
+  else{
+    myMarkers.forEach(function(m){
+      m.addTo(map)
+    })
+  }
+
+
+}
