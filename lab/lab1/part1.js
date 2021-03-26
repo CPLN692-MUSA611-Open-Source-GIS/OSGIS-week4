@@ -118,7 +118,7 @@ Use _.groupBy to organize the baked goods by type.
 
 var query7 = _.groupBy(bakedGoods, function(input) {return input.type});
 
-console.log('Grouped by type:', query7);
+console.log('Grouped by type:', query7); 
 
 /* =====================
 Grouping by type (query7) changed the structure/shape of our data. Instead of an
