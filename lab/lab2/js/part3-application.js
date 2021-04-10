@@ -27,9 +27,10 @@
   Define a resetMap function to remove markers from the map and clear the array of markers
 ===================== */
 var resetMap = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+  if(makeMarkers.length > 0){
+    makeMarkers.forEach(mark => map.removeLayer(mark))
+    makeMarkers = []
+  }
 };
 
 /* =====================
@@ -38,17 +39,42 @@ var resetMap = function() {
   it down!
 ===================== */
 var getAndParseData = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+  getData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/world-country-capitals.json")
+  getData.done((data) => {
+    var capitals = JSON.parse(data)
+    var cleancapitals = capitals.map(function(capital){
+      capital.CapitalLatitude = Number(capital.CapitalLatitude)
+      capital.CapitalLongitude = Number(capital.CapitalLongitude)
+      return capital 
+    })
+    return cleancapitals
+  })
 };
+
 
 /* =====================
   Call our plotData function. It should plot all the markers that meet our criteria (whatever that
   criteria happens to be — that's entirely up to you)
 ===================== */
-var plotData = function() {
-  /* =====================
-    Fill out this function definition
-  ===================== */
+var ContinentMarkers = function(data, continent){
+  return (data.ContinentName == continent)
+}
+
+var CapitalMarkers = function(data, capital){
+  return (data.CapitalName == capital)
+}
+ 
+  var makeMarkers = function(data) { 
+    return data.map(item => L.marker([item.CapitalLatitude, item.CapitalLongitude]) ) ;
+  };
+  
+  var plotMarkers = function(data) {
+    return data.map(item => item.addTo(map));
+  };
+
+  var plotData = function() {
+    let filtered = _.filter(data, (data) => {
+      return ContinentMarkers(data, stringField) && 
+      CapitalMarkers(data, stringField)
+    })
 };

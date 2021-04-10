@@ -139,8 +139,6 @@ Whole Wheat ... $4.49
 
 ===================== */
 
-var printMenuGroups(query7) = _.template(" <%print(food + '...$' + price); %>") ;
-
 /* =====================
 We're probably writing each line of the menu with the code `food.name + " ... $" + food.price`.
 While this method technically works, it will become less manageable when the
