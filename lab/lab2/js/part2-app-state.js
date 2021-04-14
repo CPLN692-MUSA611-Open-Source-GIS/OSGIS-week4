@@ -39,19 +39,22 @@ var downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Ope
 // as you like, create fields, etc)
 var parseData = function(data) {
   data = JSON.parse(data);
-  return data;
+  return data
 };
 
 // Write a function to use your parsed data to create a bunch of
 // marker objects (don't plot them!)
-var makeMarkers = function(data) {
-  var markers = data.map(function(addmarkers) {return L.marker([addmarkers.CapitalLatitude,addmarkers.CapitalLongitude])})
-  return markers }
+
+var makeMarkers = function(dat) {
+  result = [];
+  // x = dat.map(a => result.push(L.marker({"lat": a["Lat"], "lng": a["Lng"]})))
+  x = dat.map( a => result.push(L.marker(i[CapitalLatitude], i[CapitalLongitude])).bindPopup(i["capital"]))
+  return result };
 
 // Now we need a function that takes this collection of markers
 // and puts them on the map
-var plotMarkers = function(marker) {
-  markers.forEach((mark => mark.addTo(map)))
+var plotMarkers = function(markers) {
+  return markers.forEach((i => i.addTo(map)))
 };
 
 // At this point you should see a bunch of markers on your map if
@@ -73,35 +76,33 @@ var plotMarkers = function(marker) {
 
 // Look to the bottom of this file and try to reason about what this
 // function should look like
-var removeMarkers = function(markers) {
-  markers.forEach(function(marker){
-    map.removeLayer(marker)
-  })
+var removeData = function(markers) {
+  return markers(i => map.removeLayer(i))
 };
 
-/* =====================
- Leaflet setup - feel free to ignore this
-===================== */
-
-var map = L.map('map', {
-  center: [39.9522, -75.1639],
-  zoom: 14
-});
-var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', {
-  attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  subdomains: 'abcd',
-  minZoom: 0,
-  maxZoom: 20,
-  ext: 'png'
-}).addTo(map);
-
-/* =====================
- CODE EXECUTED HERE!
-===================== */
+  /* =====================
+   Leaflet setup - feel free to ignore this
+  ===================== */
+  
+  var map = L.map('map', {
+    center: [39.9522, -75.1639],
+    zoom: 14
+  });
+  var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', {
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    subdomains: 'abcd',
+    minZoom: 0,
+    maxZoom: 20,
+    ext: 'png'
+  }).addTo(map);
+  
+  /* =====================
+   CODE EXECUTED HERE!
+  ===================== */
 
 downloadData.done(function(data) {
   var parsed = parseData(data);
   var markers = makeMarkers(parsed);
   plotMarkers(markers);
-  removeMarkers(markers);
-});
+  removeData(markers);
+})
