@@ -9,3 +9,11 @@ var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/ton
   maxZoom: 20,
   ext: 'png'
 }).addTo(map);
+
+promise = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/world-country-capitals.json")
+promise.done((arg)=>{console.log(arg)
+  let parsedArg = JSON.parse(arg)
+  parsedArg.forEach(addMarkers)
+  function addMarkers(capitals){
+    var marker =L.marker([capitals.CapitalLatitude, capitals.CapitalLongitude]).addTo(map);
+  }}) 
