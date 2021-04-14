@@ -47,7 +47,6 @@ var parseData = function(data) {
 
 var makeMarkers = function(dat) {
   result = [];
-  // x = dat.map(a => result.push(L.marker({"lat": a["Lat"], "lng": a["Lng"]})))
   x = dat.map( a => result.push(L.marker(i[CapitalLatitude], i[CapitalLongitude])).bindPopup(i["capital"]))
   return result };
 
