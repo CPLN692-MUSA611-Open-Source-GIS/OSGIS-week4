@@ -30,10 +30,12 @@ var resetMap = function() {
   /* =====================
     Fill out this function definition
   ===================== */
-  return myMarkers.map(function(marker){
+  myMarkers.map(function(marker){
     map.removeLayer(marker)
   });
+  return map
 };
+
 
 /* =====================
   Define a getAndParseData function to grab our dataset through a jQuery.ajax call ($.ajax). It
