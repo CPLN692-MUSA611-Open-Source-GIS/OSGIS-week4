@@ -30,6 +30,10 @@ var resetMap = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  myMarkers.forEach(function(marker){
+    map.removeLayer(marker);
+  });
+  myMarkers = [];
 };
 
 /* =====================
@@ -37,10 +41,15 @@ var resetMap = function() {
   will be called as soon as the application starts. Be sure to parse your data once you've pulled
   it down!
 ===================== */
+var parsed = [];
 var getAndParseData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  var downloadData = $.ajax("https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/json/philadelphia-solar-installations.json");
+  downloadData.done(function(data) {
+    parsed = JSON.parse(data);;
+  });
 };
 
 /* =====================
@@ -51,4 +60,45 @@ var plotData = function() {
   /* =====================
     Fill out this function definition
   ===================== */
+  var numFiltered = [];
+  var strFiltered = [];
+  var finalFiltered = [];
+
+  if (checkNum(numericField1, numericField2)){
+    numFiltered = _.filter(parsed, function(data){
+      return ((data.YEARBUILT >= numer1) && (data.YEARBUILT <= numericField2));
+    })
+  };
+
+  if (_.isString(stringField)){
+    strFiltered = _.filter(parsed, function(data){
+      return data.ZIPCODE == stringField;
+    })
+  }
+
+  if (booleanField){
+    finalFiltered = _.intersection(numFiltered, strFiltered);
+  } else {
+    finalFiltered = _.union(numFiltered, strFiltered);
+  }
+
+  _.each(finalFiltered, function(item){
+    myMarkers.push(L.marker([item.Y, item.X]).bindPopup(`${item.NAME} built in ${item.YEARBUILT}`))
+  })
+  _.each(myMarkers, function(marker){
+    marker.addTo(map);
+  })
+
 };
+
+
+function checkNum(num1, num2){
+  var validNum = false
+  if (_.isNumber(num1) && _.isNumber(num2)){
+    if (num2 >= num1){
+      validNum = true
+    };
+  return validNum;
+  };
+};
+
